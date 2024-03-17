@@ -168,6 +168,29 @@ require("telescope").load_extension "file_browser"
 -- Load Neotree
 require('neo-tree').setup()
 
+-- Load Wilder (command completion)
+local wilder = require('wilder')
+wilder.setup({ modes = { ':', '/', '?' } })
+
+wilder.set_option('pipeline', {
+  wilder.branch(
+    wilder.cmdline_pipeline({
+      -- Sets the language to use, 'vim' and 'python' are supported
+      language = 'vim',
+      -- 0 turns off fuzzy matching
+      -- 1 turns on fuzzy matching
+      -- 2 partial fuzzy matching (match does not have to begin with the same first letter)
+      fuzzy = 1,
+    })
+  ),
+})
+
+wilder.set_option('renderer', wilder.popupmenu_renderer({
+  highlighter = wilder.basic_highlighter(),
+  left = { ' ', wilder.popupmenu_devicons() },
+  right = { ' ', wilder.popupmenu_scrollbar() },
+}))
+
 -- Setup language servers
 local lspconfig = require('lspconfig')
 lspconfig.pyright.setup( {})
